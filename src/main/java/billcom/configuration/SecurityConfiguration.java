@@ -1,15 +1,13 @@
 package billcom.configuration;
 
-
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,28 +23,33 @@ import billcom.services.UserDetailsServiceImpl;
 public class SecurityConfiguration {
 	
 	private UserDetailsServiceImpl userDetailsServiceImpl;
-	
+	private AuthTokenFilter unauthorizedHandler;
 
-	public SecurityConfiguration(UserDetailsServiceImpl userDetailsServiceImpl) {
-		super();
-		this.userDetailsServiceImpl = userDetailsServiceImpl;
-	}
+
+	@Autowired
+	public SecurityConfiguration(UserDetailsServiceImpl userDetailsServiceImpl, AuthTokenFilter unauthorizedHandler) {
 	
+		this.userDetailsServiceImpl = userDetailsServiceImpl;
+		this.unauthorizedHandler = unauthorizedHandler;
+	}
+
+
 	@Bean
 	AuthEntryPointJwt unauthorizedHandler() {
 		return new AuthEntryPointJwt();
 	}
 	
+    @Bean
+    ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 	
-	@Bean
-	AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
 	
 	@Bean
 	   PasswordEncoder passwordEncoder() {
 		    return new BCryptPasswordEncoder();
 		  }
+	
 	
 	  @Bean
 	   DaoAuthenticationProvider authenticationProvider() {
@@ -54,11 +57,8 @@ public class SecurityConfiguration {
 	  
 	  authProvider.setUserDetailsService(userDetailsServiceImpl);
 	  authProvider.setPasswordEncoder(passwordEncoder());
-	  
-	  return authProvider;
+	   return authProvider;
 	  }
-	  
-		
 	  
 		  @Bean
 		  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -72,21 +72,10 @@ public class SecurityConfiguration {
 		  
 		  http.authenticationProvider(authenticationProvider());
 		  
-		  http.addFilterBefore(authenticationJwtTokenFilter(),
+		  http.addFilterBefore(unauthorizedHandler,
 		  UsernamePasswordAuthenticationFilter.class);
 		  
 		  return http.build(); }
-		 
-	  
-		/*
-		 * @Bean DefaultSecurityFilterChain configure(HttpSecurity http) throws
-		 * Exception { http .csrf().disable() .authorizeRequests()
-		 * .requestMatchers("/api/auth/**").permitAll() // Adjust this based on your
-		 * registration endpoint .anyRequest().authenticated() .and()
-		 * .exceptionHandling().authenticationEntryPoint(unauthorizedHandler());
-		 * 
-		 * return http.build(); }
-		 */
 	  
 	  
 	  @Bean  // pour le AuthService pour manager les authentifaction

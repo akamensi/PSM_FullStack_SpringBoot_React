@@ -31,11 +31,13 @@ public class JwtUtils {
 	  @Value("${jwtExpirationMs}")
 	  private int jwtExpirationMs;
 	  
-	  @PostConstruct //To validate the jwtSecret when the application starts public
-	  void validateSecret() { if (jwtSecret == null || jwtSecret.length() < 600) {
-	  throw new
-	  IllegalArgumentException("JWT secret key must be at least 32 characters long"
-	  ); } }
+		
+		  @PostConstruct //To validate the jwtSecret when the application starts public
+		  void validateSecret() { if (jwtSecret == null || jwtSecret.length() < 600) {
+		  throw new
+		  IllegalArgumentException("JWT secret key must be at least 32 characters long"
+		  ); } }
+		 
 	  
 	  
 	  public String generateJwtToken(Authentication authentication) {

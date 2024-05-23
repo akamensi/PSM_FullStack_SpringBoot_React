@@ -32,6 +32,8 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private Set<Projet> projets;
     
+    public Client() {}
+    
 	public Client(@NotBlank @Size(max = 20) String nom, @NotBlank @Size(max = 20) String tel,
 			@NotBlank @Size(max = 20) String email, @NotBlank @Size(max = 20) String adresse) {
 		super();

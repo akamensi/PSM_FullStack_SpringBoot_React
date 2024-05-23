@@ -18,31 +18,39 @@ public class Projet {
 	@Size(max = 20)
     private String libelle;
 	
-	@NotBlank
-	@Size(max = 20)
+	@NotNull
     private Double budget;
 	
-	@NotBlank
-	@Size(max = 20)
+	@NotNull
     private Integer duree;
 	
 	@NotBlank
 	@Size(max = 20)
     private String description;
 	
+	@NotBlank
+	private String logo;
+	
 	@ManyToOne
     @JoinColumn(name = "client_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
     private Client client;
 
-	public Projet(@NotBlank @Size(max = 20) String libelle, @NotBlank @Size(max = 20) Double budget,
-			@NotBlank @Size(max = 20) Integer duree, @NotBlank @Size(max = 20) String description) {
+	public Projet() {}
+
+
+	
+	public Projet(@NotBlank @Size(max = 20) String libelle, @NotNull Double budget, @NotNull Integer duree,
+			@NotBlank @Size(max = 20) String description, @NotBlank String logo) {
 		super();
 		this.libelle = libelle;
 		this.budget = budget;
 		this.duree = duree;
 		this.description = description;
+		this.logo = logo;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -91,6 +99,20 @@ public class Projet {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+
+
+
+	public String getLogo() {
+		return logo;
+	}
+
+
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+	
+
 	
 
 	
