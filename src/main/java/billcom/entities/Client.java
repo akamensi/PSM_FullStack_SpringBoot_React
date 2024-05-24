@@ -2,6 +2,8 @@ package billcom.entities;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -30,6 +32,7 @@ public class Client {
 	 private String adresse;
 
     @OneToMany(mappedBy = "client")
+    @JsonBackReference
     private Set<Projet> projets;
     
     public Client() {}

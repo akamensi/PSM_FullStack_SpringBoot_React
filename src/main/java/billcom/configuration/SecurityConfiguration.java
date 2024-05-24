@@ -67,7 +67,7 @@ public class SecurityConfiguration {
 		  .sessionManagement(session ->
 		  session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		  .authorizeHttpRequests(auth ->
-		  auth.requestMatchers("/api/auth/**").permitAll()
+		  auth.requestMatchers("/api/auth/**", "/restProjet/**").permitAll()
 		  .anyRequest().authenticated());
 		  
 		  http.authenticationProvider(authenticationProvider());
@@ -91,7 +91,14 @@ public class SecurityConfiguration {
 	  
 	  
 	  
-	    
+	    /*
+	     * @Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication()
+        .withUser("admin").password("{noop}password").roles("ADMIN")
+        .and()
+        .withUser("user").password("{noop}password").roles("USER");
+}*/
 	    
 	
 	  

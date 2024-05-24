@@ -3,6 +3,8 @@ package billcom.entities;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -34,6 +36,7 @@ public class Projet {
 	@ManyToOne
     @JoinColumn(name = "client_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonBackReference
     private Client client;
 
 	public Projet() {}
